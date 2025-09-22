@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-const nodemailer = require("nodemailer")
+import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
   try {
     // ✅ Extract event inquiry data from frontend
-    const { name, email, phone, eventType, eventDate, budget, message } = await req.json();
+    const { name, email, phone, eventType, message } = await req.json();
 
     if (!name || !email || !phone || !eventType || !message) {
       return NextResponse.json(
@@ -51,10 +51,10 @@ export async function POST(req: Request) {
       { status: 200 }
     );
     
-  } catch (error: any) {
+  } catch (error) {
     console.error("Email error:", error);
     return NextResponse.json(
-      { ok: false, message: "Failed to send event inquiry", error: error.message },
+      { ok: false, message: "Failed to send event inquiry", error: error instanceof Error ? error.message : error },
       { status: 500 }
     );
   }

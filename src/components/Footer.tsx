@@ -13,20 +13,9 @@ import {
   ChevronUp,
   Heart
 } from "lucide-react";
-import { useState } from "react";
+// import { useState } from "react";
 
 export const Footer = () => {
-  const [email, setEmail] = useState("");
-  // const handleSubscribe = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (email) {
-  //     // Handle newsletter subscription here
-  //     console.log("Subscribing email:", email);
-  //     setEmail("");
-  //     // You can add your newsletter subscription logic here
-  //   }
-  // };
-
   return (
     <footer className="bg-gradient-to-br from-purple-600 to-purple-800 text-white relative overflow-hidden">
       {/* Background Pattern */}

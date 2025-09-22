@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 
 export function NavbarDemo() {
@@ -33,7 +33,7 @@ export function NavbarDemo() {
       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
     } else {
       // Navigate to home with hash
-     window.location.href = "/#contact_us"
+     window.location.href = "/#contact"
     }
   };
   return (

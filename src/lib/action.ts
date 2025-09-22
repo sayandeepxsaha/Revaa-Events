@@ -38,6 +38,7 @@ export async function sendContact(_: ContactState, formData: FormData): Promise<
     if (isNaN(date.getTime())) {
       errors.message = "Please enter a valid event date."
     }
+  }
 
   // Honeypot: if filled, treat as spam
   if (company) {
@@ -56,4 +57,4 @@ export async function sendContact(_: ContactState, formData: FormData): Promise<
     ok: true,
     message: "Thanks for reaching out to Revaa! We've received your event inquiry and will get back to you within 4 hours with a personalized proposal.",
   }
-}
+  }

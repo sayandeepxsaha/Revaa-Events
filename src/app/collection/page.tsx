@@ -82,7 +82,9 @@ Revaa is your trusted partner in planning, managing, <br /> and executing extrao
           <GalleryContainer>
             <GalleryCol yRange={["-10%", "2%"]} className="-mt-2">
               {IMAGES_1.map((url, i) => (
-                <img 
+                <Image 
+                height={100}
+                width={100} 
                   key={i}
                   src={url}
                   alt="gallery item"
@@ -92,7 +94,9 @@ Revaa is your trusted partner in planning, managing, <br /> and executing extrao
             </GalleryCol>
             <GalleryCol className="mt-[-50%]" yRange={["15%", "5%"]}>
               {IMAGES_2.map((url, i) => (
-                <img
+                <Image 
+                height={100}
+                width={100}
                   key={i}
                   src={url}
                   alt="gallery item"
@@ -102,7 +106,9 @@ Revaa is your trusted partner in planning, managing, <br /> and executing extrao
             </GalleryCol>
             <GalleryCol yRange={["-10%", "2%"]} className="-mt-2">
               {IMAGES_3.map((url, i) => (
-                <img
+                <Image 
+                height={100}
+                width={100}
                   key={i}
                   src={url}
                   alt="gallery item"

@@ -42,7 +42,7 @@ const staggerContainer = {
 };
 
 const ServicesPage: React.FC = () => {
-  const [activeService, setActiveService] = useState<string>("");
+  // const [activeService, setActiveService] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const services: Service[] = [
@@ -177,6 +177,10 @@ const ServicesPage: React.FC = () => {
           return true;
         });
 
+  // function setActiveService( ): void {
+  //   throw new Error("Function not implemented.");
+  // }
+
   return (
     <>
             <NavbarDemo />
@@ -287,14 +291,14 @@ const ServicesPage: React.FC = () => {
             animate="show"
             className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mb-20"
           >
-            {filteredServices.map((service, index) => (
+            {filteredServices.map((service) => (
               <motion.div
                 key={service.id}
                 variants={fadeInUp}
                 whileHover={{ y: -8, scale: 1.02 }}
                 className="group relative bg-gradient-to-r from-purple-200 to-pink-200 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-gray-200 hover:shadow-xl transition-all duration-500 cursor-pointer"
-                onMouseEnter={() => setActiveService(service.id)}
-                onMouseLeave={() => setActiveService("")}
+                // onMouseEnter={() => setActiveService()}
+                // onMouseLeave={() => setActiveService()}
               >
                 {/* Popular Badge */}
                 {service.popular && (
@@ -348,7 +352,7 @@ const ServicesPage: React.FC = () => {
 
                 {/* CTA Button */}
                 <motion.button
-                    onClick={() => {window.location.href = "/#contact_us"}}
+                    onClick={() => {window.location.href = "/#contact"}}
                     whileHover={{ scale: 1.05 }}
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2.5 md:py-3 px-4 md:px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2"
                   >

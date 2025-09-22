@@ -138,7 +138,9 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
                 rotate: `${(index % 2 === 0 ? -2 : 5)}deg`,
               }}
             >
-              <img
+              <Image
+              height={100}
+              width={100}
                 src={src}
                 alt={`Showcase image ${index + 1}`}
                 className="w-full h-full object-cover rounded-2xl shadow-md"

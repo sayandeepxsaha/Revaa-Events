@@ -167,7 +167,7 @@ export default function ContactUs() {
             REACH OUT TO REVAA-BOT
           </p>
           <h2 className="text-4xl font-extrabold text-gray-900">
-            Let's Plan Magic Together ✨
+            Let&apos;s Plan Magic Together ✨
           </h2>
           <p className="mt-4 text-gray-700 max-w-2xl mx-auto">
             Ready to transform your vision into a memorable event? Our team is

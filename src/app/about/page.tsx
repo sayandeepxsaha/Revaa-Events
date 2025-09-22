@@ -14,33 +14,8 @@ import {
   Zap,
   Sparkles,
 } from "lucide-react";
-import React, { useState } from "react";
-
-// Ensure Sparkles is imported
-// Sparkles icon is available in lucide-react as `Sparkles` [9][6]
-
-interface TeamMember {
-  name: string;
-  role: string;
-  image: string;
-  bio: string;
-  expertise: string[];
-}
-
-interface Milestone {
-  year: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
-
+import React from "react";
 const AboutPage: React.FC = () => {
-  // const [activeSection, setActiveSection] = useState("");
-  // const [hoveredMember, setHoveredMember] = useState("");
-
-  
-
- 
   return (
     <>
             <NavbarDemo />

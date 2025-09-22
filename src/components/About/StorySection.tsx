@@ -78,12 +78,12 @@ const StorySection = () => {
             </p>
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">
               What started as planning intimate gatherings for friends and
-              family has now blossomed into one of India's most trusted event
+              family has now blossomed into one of India&apos;s most trusted event
               management companies, having orchestrated over 500 successful
               events across the country.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed">
-              Our name "Revaa" represents the flowing river of creativity and
+              Our name &quot;Revaa&quot; represents the flowing river of creativity and
               precision that runs through every event we create. Just like a
               river shapes the landscape it touches, we shape unforgettable
               experiences that leave lasting impressions.
