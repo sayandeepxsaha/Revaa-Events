@@ -32,7 +32,7 @@ export async function sendContact(_: ContactState, formData: FormData): Promise<
   if (!phone || !isValidPhone(phone)) errors.phone = "Please enter a valid phone number."
   if (!eventType) errors.eventType = "Please select an event type."
   if (!message || message.length < 10) errors.message = "Please describe your event vision (at least 10 characters)."
-  if (budget && isNaN(Number(budget))) errors.message = "Please enter a valid budget amount."
+  if (!budget ) errors.message = "Please enter a valid budget amount."
   if (eventDate) {
     const date = new Date(eventDate)  
     if (isNaN(date.getTime())) {
