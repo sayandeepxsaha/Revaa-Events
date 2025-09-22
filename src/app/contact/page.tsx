@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Twitter } from "lucide-react";
 import { useState, useTransition } from "react";
 import { sendContact, type ContactState } from "@/lib/action"; // Adjust import path as needed
 
