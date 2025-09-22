@@ -20,10 +20,10 @@ export default function ContactUs() {
 
 
   const icons = [
-    { component: Facebook, href: "https://facebook.com" },
+    { component: Facebook, href: "" },
     { component: Instagram, href: "https://www.instagram.com/revaa.events/" },
-     { component: Twitter, href: "https://youtube.com" },
-    { component: Linkedin, href: "https://linkedin.com" },
+     { component: Twitter, href: "" },
+    
    
   ];
 
@@ -111,7 +111,7 @@ export default function ContactUs() {
     {
       icon: <Phone className="h-5 w-5 text-pink-600" />,
       title: "Call Us",
-      details: "+91 90457 00873",
+      details: "+91 6372 915 914",
       subdetails: "Available Mon-Sat | 9am - 8pm",
     },
     {

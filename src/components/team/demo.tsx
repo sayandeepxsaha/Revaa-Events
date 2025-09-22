@@ -6,32 +6,39 @@ const members = [
         name: 'Shyam Barua',
         role: 'Founder & CEO',
         avatar: '/team/dj.webp',
-        link: '#',
+        link: '',
     },
     {
         name: 'Siddharth Singh',
         role: 'Director',
         avatar: '/team/dummy.jpg',
-        link: '#',
+        link: '',
     },
     {
         name: 'Navneet',
         role: 'Digital Marketing Head',
         avatar: '/team/dummy.jpg',
-        link: '#',
+        link: '',
     },
     {
         name: 'Shaunak Chalsey',
         role: 'Cinematographer - Content Writer - Video Editor',
         avatar: '/team/sou.webp',
-        link: '#',
+        link: '',
     },
      {
         name: 'Sayandeep Saha',
         role: 'Tech - Photographer',
         avatar: '/team/say.webp',
-        link: '#',
+        link: '',
+    },
+    {
+        name: 'Souvik Chatterjee',
+        role: 'Photographer',
+        avatar: '/team/sc.webp',
+        link: '',
     }
+        
 ]
 
 export default function TeamSection() {
@@ -57,7 +64,7 @@ export default function TeamSection() {
                                         <span className="text-muted-foreground inline-block translate-y-6 text-sm opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">{member.role}</span>
                                         <Link href={member.link} className="group-hover:text-primary-600 dark:group-hover:text-primary-400 inline-block translate-y-8 text-sm tracking-wide opacity-0 transition-all duration-500 hover:underline group-hover:translate-y-0 group-hover:opacity-100">
                                             {' '}
-                                            LinkedIn
+                                            Instagram
                                         </Link>
                                     </div>
                                 </div>

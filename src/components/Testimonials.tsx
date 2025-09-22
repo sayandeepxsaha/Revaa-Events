@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import React from "react";
+import { motion, useAnimation } from "framer-motion";
+import React, { useEffect, useRef } from "react";
 
 const testimonials = [
   {
@@ -32,21 +32,46 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
+  const controls = useAnimation();
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Start auto-scrolling
+    controls.start({
+      x: ["0%", "-100%"],
+      transition: {
+        repeat: Infinity,
+        duration: 30,
+        ease: "linear",
+      },
+    });
+  }, [controls]);
+
   return (
-    <section className="relative py-16  overflow-hidden">
+    <section className="relative py-16 overflow-hidden">
       <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 font-[Fraunces] text-pink-500">
         What Our Customers Say
       </h2>
 
       <div className="relative w-full overflow-hidden">
-        {/* Infinite scrolling track */}
         <motion.div
-          className="flex gap-6"
-          animate={{ x: ["0%", "-100%"] }}
-          transition={{
-            repeat: Infinity,
-            duration: 30,
-            ease: "linear",
+          ref={trackRef}
+          className="flex gap-6 cursor-grab active:cursor-grabbing"
+          animate={controls}
+          drag="x"
+          dragConstraints={{ left: -1000, right: 0 }} // adjust based on content width
+          dragElastic={0.2}
+          onDragStart={() => controls.stop()} // pause auto-scroll while dragging
+          onDragEnd={() => {
+            // resume auto-scroll after drag
+            controls.start({
+              x: ["0%", "-100%"],
+              transition: {
+                repeat: Infinity,
+                duration: 30,
+                ease: "linear",
+              },
+            });
           }}
         >
           {[...testimonials, ...testimonials].map((testimonial, idx) => (

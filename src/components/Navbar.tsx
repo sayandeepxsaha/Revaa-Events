@@ -76,7 +76,7 @@ export function NavbarDemo() {
                 key={`mobile-link-${idx}`}
                 href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative block text-white hover:text-pink-400"
+                className="relative block text-black font-black hover:text-pink-400"
               >
                 {item.name}
               </Link>

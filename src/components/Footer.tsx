@@ -54,8 +54,7 @@ export const Footer = () => {
                 {[
                   { icon: Facebook, href: "#", label: "Facebook" },
                   { icon: Instagram, href: "https://www.instagram.com/revaa.events/", label: "Instagram" },
-                  { icon: Twitter, href: "#", label: "Twitter" },
-                  { icon: Linkedin, href: "#", label: "LinkedIn" }
+                  { icon: Twitter, href: "#", label: "Twitter" }
                 ].map(({ icon: Icon, href, label }) => (
                   <a
                     key={label}
