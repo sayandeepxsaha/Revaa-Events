@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 export default function AboutUs() {
   const achievements = [
@@ -12,7 +13,13 @@ export default function AboutUs() {
   ];
 
   return (
-    <div className="bg-gray-50 py-20">
+    <>
+    <div>
+      <h1 className="text-4xl font-black text-center mt-15 -mb-15 text-pink-500">
+        About Us
+      </h1>
+    </div>
+    <div className="bg-gray-50 py-20 overflow-x-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left side - Image + floating badge */}
@@ -52,10 +59,6 @@ export default function AboutUs() {
             whileInView={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
-            <p className="text-pink-600 font-semibold mb-2">ABOUT US</p>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Revaa: Redefining Modern Events
-            </h2>
 
             <p className="text-gray-700 mb-5">
               At <b className="text-pink-600">Revaa</b>, we blend creativity
@@ -84,17 +87,21 @@ export default function AboutUs() {
                 </motion.div>
               ))}
             </div>
-
+            
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors"
             >
+              <Link href="/about" className="font-semibold">
               DISCOVER OUR STORY
+              </Link>
             </motion.button>
+            
           </motion.div>
         </div>
       </div>
     </div>
+    </>
   );
 }

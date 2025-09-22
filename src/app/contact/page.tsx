@@ -1,43 +1,138 @@
 "use client";
 
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  Send,
-  CheckCircle,
-  Calendar,
-  Users,
-  ArrowRight,
-} from "lucide-react";
-import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { useState, useTransition } from "react";
+import { sendContact, type ContactState } from "@/lib/action"; // Adjust import path as needed
 
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  eventType: string;
-  eventDate: string;
-  guestCount: string;
-  budget: string;
-  message: string;
-}
-
-const ContactPage: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
+export default function ContactUs() {
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     eventType: "",
     eventDate: "",
-    guestCount: "",
     budget: "",
     message: "",
   });
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
+
+
+  const icons = [
+    { component: Facebook, href: "https://facebook.com" },
+    { component: Instagram, href: "https://www.instagram.com/revaa.events/" },
+     { component: Twitter, href: "https://youtube.com" },
+    { component: Linkedin, href: "https://linkedin.com" },
+   
+  ];
+
+  const [state, setState] = useState<ContactState>({ ok: undefined });
+  const [isPending, startTransition] = useTransition();
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Clear field-specific errors when user starts typing
+    if (state.errors?.[name as keyof typeof state.errors]) {
+      setState(prev => ({
+        ...prev,
+        errors: {
+          ...prev.errors,
+          [name]: undefined
+        }
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    startTransition(async () => {
+      const formDataObj = new FormData();
+      formDataObj.append("name", formData.name);
+      formDataObj.append("email", formData.email);
+      formDataObj.append("phone", formData.phone);
+      formDataObj.append("eventType", formData.eventType);
+      formDataObj.append("eventDate", formData.eventDate);
+      formDataObj.append("budget", formData.budget);
+      formDataObj.append("message", formData.message);
+
+      const result = await sendContact(state, formDataObj);
+      setState(result);
+
+      // If successful, also send email via API
+      if (result.ok) {
+        try {
+          const response = await fetch("/api/sendEmail", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              eventType: formData.eventType,
+              eventDate: formData.eventDate,
+              budget: formData.budget,
+              message: formData.message,
+            }),
+          });
+
+          if (response.ok) {
+            // Reset form on success
+            setFormData({
+              name: "",
+              email: "",
+              phone: "",
+              eventType: "",
+              eventDate: "",
+              budget: "",
+              message: "",
+            });
+          }
+        } catch (error) {
+          console.error("Email sending failed:", error);
+        }
+      }
+    });
+  };
+
+  const contactInfo = [
+    {
+      icon: <Phone className="h-5 w-5 text-pink-600" />,
+      title: "Call Us",
+      details: "+91 90457 00873",
+      subdetails: "Available Mon-Sat | 9am - 8pm",
+    },
+    {
+      icon: <Mail className="h-5 w-5 text-pink-600" />,
+      title: "Email Us",
+      details: "hello@revaaevent.com",
+      subdetails: "We typically reply within 12 hours",
+    },
+    {
+      icon: <MapPin className="h-5 w-5 text-pink-600" />,
+      title: "Our HQ",
+      details: "Revaa Studios, Bhubaneswar, Orisha, India",
+      subdetails: "By appointment only",
+    },
+    {
+      icon: <Clock className="h-5 w-5 text-pink-600" />,
+      title: "Timings",
+      details: "Mon - Sat: 9:00 AM to 8:00 PM",
+      subdetails: "Closed on Sundays",
+    },
+  ];
 
   const eventTypes = [
     "Wedding",
@@ -49,6 +144,7 @@ const ContactPage: React.FC = () => {
     "Networking Event",
     "Other",
   ];
+
   const budgetRanges = [
     "Under ₹50,000",
     "₹50,000 - ₹1,00,000",
@@ -58,479 +154,272 @@ const ContactPage: React.FC = () => {
     "Above ₹10,00,000",
   ];
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        eventType: "",
-        eventDate: "",
-        guestCount: "",
-        budget: "",
-        message: "",
-      });
-    }, 3000);
-  };
-
-  if (isSubmitted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4">
-        <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-12 text-center max-w-md border border-white/20">
-          <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-6 animate-pulse" />
-          <h2 className="text-3xl font-bold text-white mb-4">Thank You!</h2>
-          <p className="text-lg text-gray-300 leading-relaxed">
-            We've received your inquiry and will get back to you within 4 hours
-            with a personalized proposal.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Subtle animated background */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div
-          className="absolute top-3/4 right-1/4 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"
-          style={{ animationDelay: "1s" }}
-        ></div>
-        <div
-          className="absolute bottom-1/4 left-1/2 w-64 h-64 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"
-          style={{ animationDelay: "2s" }}
-        ></div>
-      </div>
-
-      <div className="relative z-10">
-        {/* Header Section */}
-        <div className="text-center py-20 px-4">
-          <h1 className="text-6xl md:text-7xl font-bold tracking-tight mb-6">
-            <span className="text-white">Contact </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-              REVAA
-            </span>
-          </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Transform your vision into an unforgettable experience. Let's create
-            something extraordinary together.
+    <div id="contact" className="bg-gradient-to-br from-pink-50 to-white py-16 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <p className="text-pink-600 font-semibold mb-2 tracking-wide">
+            REACH OUT TO REVAA-BOT
           </p>
-        </div>
+          <h2 className="text-4xl font-extrabold text-gray-900">
+            Let's Plan Magic Together ✨
+          </h2>
+          <p className="mt-4 text-gray-700 max-w-2xl mx-auto">
+            Ready to transform your vision into a memorable event? Our team is
+            just a form away!
+          </p>
+        </motion.div>
 
-        <div className="max-w-6xl mx-auto px-4 pb-20">
-          <div className="grid lg:grid-cols-5 gap-12">
-            {/* Contact Information */}
-            <div className="lg:col-span-2 space-y-8">
-              <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-purple-500/30 transition-all duration-300">
-                <h2 className="text-2xl font-bold text-white mb-8">
-                  Get in Touch
-                </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Contact Info */}
+          <motion.div
+            className="bg-white p-6 rounded-lg shadow-md h-full"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-xl font-bold text-gray-900 mb-6">
+              How to Reach Us
+            </h3>
 
-                <div className="space-y-6">
-                  {[
-                    {
-                      icon: Phone,
-                      label: "Phone",
-                      value: "+91 98765 43210",
-                      href: "tel:+919876543210",
-                    },
-                    {
-                      icon: Mail,
-                      label: "Email",
-                      value: "hello@revaa.events",
-                      href: "mailto:hello@revaa.events",
-                    },
-                    {
-                      icon: MapPin,
-                      label: "Location",
-                      value: "Bhubaneswar, Odisha",
-                      href: "#",
-                    },
-                    {
-                      icon: Clock,
-                      label: "Hours",
-                      value: "Mon-Sat: 9AM-8PM",
-                      href: "#",
-                    },
-                  ].map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-4 group cursor-pointer"
-                    >
-                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                        <item.icon className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-gray-300 font-medium text-sm">
-                          {item.label}
-                        </h3>
-                        <p className="text-white font-semibold group-hover:text-purple-300 transition-colors duration-300">
-                          {item.value}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { number: "500+", label: "Events Created" },
-                  { number: "50K+", label: "Happy Guests" },
-                  { number: "24/7", label: "Support" },
-                  { number: "100%", label: "Satisfaction" },
-                ].map((stat, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10 hover:border-purple-500/30 transition-all duration-300 text-center group cursor-default"
-                  >
-                    <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 group-hover:from-pink-400 group-hover:to-yellow-400 transition-all duration-300">
-                      {stat.number}
-                    </div>
-                    <div className="text-gray-300 text-sm font-medium mt-1">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Contact Form */}
-            <div className="lg:col-span-3">
-              <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-white mb-3">
-                    Plan Your Event
-                  </h2>
-                  <p className="text-gray-300">
-                    Share your vision and we'll bring it to life
-                  </p>
-                </div>
-
-                <div className="space-y-6">
-                  {/* Name and Email */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-gray-300 font-medium mb-2">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all duration-300"
-                        placeholder="Enter your name"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-gray-300 font-medium mb-2">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all duration-300"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Phone and Event Type */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-gray-300 font-medium mb-2">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all duration-300"
-                        placeholder="+91 98765 43210"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-gray-300 font-medium mb-2">
-                        Event Type
-                      </label>
-                      <select
-                        name="eventType"
-                        value={formData.eventType}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all duration-300"
-                      >
-                        <option value="" className="text-gray-800 bg-gray-100">
-                          Select event type
-                        </option>
-                        {eventTypes.map((type) => (
-                          <option
-                            key={type}
-                            value={type}
-                            className="text-gray-800 bg-gray-100"
-                          >
-                            {type}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Date and Guest Count */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-gray-300 font-medium mb-2">
-                        Event Date
-                      </label>
-                      <input
-                        type="date"
-                        name="eventDate"
-                        value={formData.eventDate}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all duration-300"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-gray-300 font-medium mb-2">
-                        Expected Guests
-                      </label>
-                      <input
-                        type="number"
-                        name="guestCount"
-                        value={formData.guestCount}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all duration-300"
-                        placeholder="Number of guests"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Budget */}
-                  <div>
-                    <label className="block text-gray-300 font-medium mb-2">
-                      Budget Range
-                    </label>
-                    <select
-                      name="budget"
-                      value={formData.budget}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all duration-300"
-                    >
-                      <option value="" className="text-gray-800 bg-gray-100">
-                        Select budget range
-                      </option>
-                      {budgetRanges.map((range) => (
-                        <option
-                          key={range}
-                          value={range}
-                          className="text-gray-800 bg-gray-100"
-                        >
-                          {range}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Message */}
-                  <div>
-                    <label className="block text-gray-300 font-medium mb-2">
-                      Tell Us About Your Vision
-                    </label>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      required
-                      rows={4}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all duration-300 resize-none"
-                      placeholder="Describe your event vision, special requirements, or any questions you have..."
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    onClick={handleSubmit}
-                    disabled={isLoading}
-                    className="group w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                    <div className="relative flex items-center justify-center space-x-3">
-                      {isLoading ? (
-                        <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                          <span>Sending...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5" />
-                          <span>Send Inquiry</span>
-                          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                        </>
-                      )}
-                    </div>
-                  </button>
-                </div>
-
-                {/* Trust Badge */}
-                <div className="mt-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-center">
-                  <p className="text-green-300 text-sm font-medium">
-                    ✓ 4-hour response guarantee • ✓ Free consultation • ✓ No
-                    hidden costs
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Call-to-Action Section */}
-          <div className="mt-20">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-white mb-4">
-                Prefer to Talk Directly?
-              </h2>
-              <p className="text-xl text-gray-300">
-                Choose your preferred way to connect with our team
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              {[
-                {
-                  title: "Call Us Now",
-                  subtitle: "Instant consultation",
-                  icon: Phone,
-                  action: "tel:+919876543210",
-                  color: "from-green-500 to-emerald-500",
-                  time: "2 min response",
-                },
-                {
-                  title: "Email Inquiry",
-                  subtitle: "Detailed discussion",
-                  icon: Mail,
-                  action: "mailto:hello@revaa.events",
-                  color: "from-blue-500 to-cyan-500",
-                  time: "4 hour response",
-                },
-                {
-                  title: "Schedule Meeting",
-                  subtitle: "Face-to-face planning",
-                  icon: Calendar,
-                  action: "#",
-                  color: "from-purple-500 to-pink-500",
-                  time: "Next day available",
-                },
-              ].map((option, index) => (
-                <a
+            <div className="space-y-6">
+              {contactInfo.map((item, index) => (
+                <motion.div
                   key={index}
-                  href={option.action}
-                  className="group block bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300 text-center transform hover:scale-105"
+                  className="flex items-start"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <div
-                    className={`bg-gradient-to-r ${option.color} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-6 transition-transform duration-300 shadow-lg`}
-                  >
-                    <option.icon className="w-8 h-8 text-white" />
+                  <div className="p-2 bg-purple-100 rounded-full mr-4">
+                    {item.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300">
-                    {option.title}
-                  </h3>
-                  <p className="text-gray-300 mb-3">{option.subtitle}</p>
-                  <div className="text-sm text-purple-300 font-medium">
-                    {option.time}
+                  <div>
+                    <h4 className="font-medium text-gray-900">{item.title}</h4>
+                    <p className="text-gray-700">{item.details}</p>
+                    <p className="text-gray-500 text-sm">{item.subdetails}</p>
                   </div>
-                </a>
+                </motion.div>
               ))}
             </div>
-          </div>
 
-          {/* Why Choose Us Section */}
-          <div className="mt-20">
-            <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 backdrop-blur-xl rounded-2xl p-12 border border-purple-500/20 max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Why Choose Revaa?
-              </h2>
-              <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-                We combine creative excellence with professional execution to
-                deliver events that exceed expectations. From intimate
-                gatherings to grand celebrations, every detail is crafted with
-                precision and passion.
-              </p>
-
-              <div className="grid md:grid-cols-3 gap-6">
-                {[
-                  {
-                    icon: Users,
-                    title: "Expert Team",
-                    desc: "Seasoned professionals",
-                  },
-                  {
-                    icon: Calendar,
-                    title: "On-Time Delivery",
-                    desc: "Every deadline met",
-                  },
-                  {
-                    icon: CheckCircle,
-                    title: "Quality Assured",
-                    desc: "100% satisfaction rate",
-                  },
-                ].map((feature, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-col items-center space-y-3 group"
+            <div className="mt-8">
+              <h4 className="font-medium text-gray-900 mb-4">Social Connect</h4>
+              <div className="flex space-x-4">
+                {icons.map(({ component: Icon, href }, idx) => (
+                  <motion.a
+                    key={idx}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="h-10 w-10 bg-pink-600 rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-purple-600"
+                    whileHover={{ scale: 1.2 }}
                   >
-                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300">
-                      <feature.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="text-white font-semibold">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm text-center">
-                      {feature.desc}
-                    </p>
-                  </div>
+                    <Icon size={20} />
+                  </motion.a>
                 ))}
               </div>
+
             </div>
-          </div>
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.div
+            className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-xl font-bold text-gray-900 mb-6">
+              Tell Us About Your Event
+            </h3>
+
+            {/* Success/Error Messages */}
+            {state.message && (
+              <div className={`mb-6 p-4 rounded-lg ${state.ok
+                  ? "bg-green-50 border border-green-200 text-green-800"
+                  : "bg-red-50 border border-red-200 text-red-800"
+                }`}>
+                <p className="font-medium">{state.message}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <motion.div whileFocus={{ scale: 1.02 }}>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Full Name <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    placeholder="Enter your name"
+                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 ${state.errors?.name ? "border-red-500" : "border-gray-300"
+                      }`}
+                  />
+                  {state.errors?.name && (
+                    <p className="mt-1 text-sm text-red-600">{state.errors.name}</p>
+                  )}
+                </motion.div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email Address <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="your@email.com"
+                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 ${state.errors?.email ? "border-red-500" : "border-gray-300"
+                      }`}
+                  />
+                  {state.errors?.email && (
+                    <p className="mt-1 text-sm text-red-600">{state.errors.email}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    placeholder="+91 98765 43210"
+                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 ${state.errors?.phone ? "border-red-500" : "border-gray-300"
+                      }`}
+                  />
+                  {state.errors?.phone && (
+                    <p className="mt-1 text-sm text-red-600">{state.errors.phone}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Event Type <span className="text-red-600">*</span>
+                  </label>
+                  <select
+                    name="eventType"
+                    value={formData.eventType}
+                    onChange={handleChange}
+                    required
+                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 ${state.errors?.eventType ? "border-red-500" : "border-gray-300"
+                      }`}
+                  >
+                    <option value="" disabled>
+                      Select event type
+                    </option>
+                    {eventTypes.map((type, i) => (
+                      <option key={i} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                  {state.errors?.eventType && (
+                    <p className="mt-1 text-sm text-red-600">{state.errors.eventType}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Event Date
+                  </label>
+                  <input
+                    type="date"
+                    name="eventDate"
+                    value={formData.eventDate}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Budget Range
+                  </label>
+                  <select
+                    name="budget"
+                    value={formData.budget}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  >
+                    <option value="" disabled>
+                      Select budget range
+                    </option>
+                    {budgetRanges.map((range, i) => (
+                      <option key={i} value={range}>
+                        {range}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tell Us About Your Vision <span className="text-red-600">*</span>
+                </label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={5}
+                  required
+                  placeholder="Describe your event vision, special requirements, or any questions you have..."
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 ${state.errors?.message ? "border-red-500" : "border-gray-300"
+                    }`}
+                />
+                {state.errors?.message && (
+                  <p className="mt-1 text-sm text-red-600">{state.errors.message}</p>
+                )}
+              </div>
+
+              <div className="flex justify-end">
+                <motion.button
+                  type="submit"
+                  disabled={isPending}
+                  whileHover={{ scale: isPending ? 1 : 1.05 }}
+                  className="bg-pink-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isPending ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      SENDING...
+                    </>
+                  ) : (
+                    "LET'S CREATE!"
+                  )}
+                </motion.button>
+              </div>
+
+              {/* Honeypot field - hidden from users */}
+              <input
+                type="text"
+                name="company"
+                style={{ display: "none" }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </form>
+          </motion.div>
         </div>
       </div>
-
-      {/* Floating Contact Button */}
-      <a
-        href="tel:+919876543210"
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-purple-600 to-pink-600 w-14 h-14 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center z-20 animate-pulse hover:animate-none"
-      >
-        <Phone className="w-6 h-6 text-white" />
-      </a>
     </div>
   );
-};
-
-export default ContactPage;
+}
