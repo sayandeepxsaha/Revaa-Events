@@ -14,31 +14,29 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-
 export function NavbarDemo() {
-  const pathname=usePathname();
+  const pathname = usePathname();
   const navItems = [
-    
     { name: "About", link: "/about" },
     { name: "Services", link: "/services" },
-     { name: "Collections", link: "/collection" },
+    { name: "Collections", link: "/collection" },
+    { name: "Corture Nights", link: "/night" },
   ];
 
-
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   const handleClick = () => {
     if (pathname === "/") {
       // Already on homepage → just scroll
       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
     } else {
       // Navigate to home with hash
-     window.location.href = "/#contact"
+      window.location.href = "/#contact";
     }
   };
+
   return (
-    
-    <div className="fixed top-0 left-0 w-full z-50 bg-white-600 text-black ">
+    <div className="fixed top-0 left-0 w-full z-50 bg-white-600 text-black">
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody>
@@ -50,9 +48,14 @@ export function NavbarDemo() {
 
           {/* Contact Button */}
           <div className="flex items-center gap-4">
-            <div onClick={() => handleClick()}>
-              <NavbarButton variant="primary" className="text-black font-black border">Contact</NavbarButton>
-            </div>
+            <NavbarButton
+              as="button"
+              onClick={handleClick}
+              variant="primary"
+              className="text-black font-black border"
+            >
+              Contact
+            </NavbarButton>
           </div>
         </NavBody>
 
@@ -84,18 +87,21 @@ export function NavbarDemo() {
 
             {/* Contact Button for Mobile */}
             <div className="flex w-full flex-col gap-4 mt-4">
-              <div onClick={() => {
-                setIsMobileMenuOpen(false);
-                handleClick();
-              }}>
-                <NavbarButton variant="primary" className="w-full">
-                  Contact Us
-                </NavbarButton>
-              </div>
+              <NavbarButton
+                as="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleClick();
+                }}
+                variant="primary"
+                className="w-full"
+              >
+                Contact Us
+              </NavbarButton>
             </div>
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-      </div>
+    </div>
   );
 }
