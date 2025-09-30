@@ -54,13 +54,14 @@ const MediaContent = ({ mediaType }: { mediaType: "video" | "image" }) => {
 };
 
 // Shared helper
-const useResetScroll = (deps:React.DependencyList[] = []) => {
+const useResetScroll = (deps: React.DependencyList = []) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     const resetEvent = new Event("resetSection");
     window.dispatchEvent(resetEvent);
   }, deps);
 };
+
 
 // Components
 export const VideoExpansionTextBlend = () => {
