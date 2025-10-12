@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "REVAA Events",
-  description: "Made with Love, Chai and Code",
+  description: "Made with Love",
 };
 
 export default function RootLayout({

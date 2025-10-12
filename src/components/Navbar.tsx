@@ -12,28 +12,30 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 
 export function NavbarDemo() {
-  const pathname = usePathname();
+  // const pathname = usePathname();
+  const router = useRouter();
   const navItems = [
     { name: "About", link: "/about" },
     { name: "Services", link: "/services" },
     { name: "Collections", link: "/collection" },
-    { name: "Corture Nights", link: "/night" },
+    { name: "Registration", link: "/register" },
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleClick = () => {
-    if (pathname === "/") {
-      // Already on homepage → just scroll
-      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      // Navigate to home with hash
-      window.location.href = "/#contact";
-    }
-  };
+  // const handleClick = () => {
+  //   if (pathname === "/") {
+  //     // Already on homepage → just scroll
+  //     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+  //   } else {
+  //     // Navigate to home with hash
+  //     window.location.href = "/#contact";
+  //   }
+  // };
 
   return (
     <div className="fixed top-0 left-0 w-full z-50 bg-white-600 text-black">
@@ -50,7 +52,8 @@ export function NavbarDemo() {
           <div className="flex items-center gap-4">
             <NavbarButton
               as="button"
-              onClick={handleClick}
+              onClick={() => router.push("/contact")}
+
               variant="primary"
               className="text-black font-black border"
             >
@@ -89,10 +92,8 @@ export function NavbarDemo() {
             <div className="flex w-full flex-col gap-4 mt-4">
               <NavbarButton
                 as="button"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  handleClick();
-                }}
+                onClick={() => router.push("/contact")}
+
                 variant="primary"
                 className="w-full"
               >

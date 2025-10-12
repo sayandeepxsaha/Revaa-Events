@@ -18,6 +18,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { NavbarDemo } from "@/components/Navbar";
 import Testimonials from "@/components/Testimonials";
+import { useRouter } from "next/navigation";
 
 interface Service {
   id: string;
@@ -44,6 +45,7 @@ const staggerContainer = {
 const ServicesPage: React.FC = () => {
   // const [activeService, setActiveService] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const router = useRouter();
 
   const services: Service[] = [
     {
@@ -352,7 +354,7 @@ const ServicesPage: React.FC = () => {
 
                 {/* CTA Button */}
                 <motion.button
-                    onClick={() => {window.location.href = "/#contact"}}
+                    onClick={() => router.push("/contact")}
                     whileHover={{ scale: 1.05 }}
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2.5 md:py-3 px-4 md:px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2"
                   >

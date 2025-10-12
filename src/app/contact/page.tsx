@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Twitter } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Facebook, Instagram } from "lucide-react";
 import { useState, useTransition } from "react";
 import { sendContact, type ContactState } from "@/lib/action"; // Adjust import path as needed
+import { NavbarDemo } from "@/components/Navbar";
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -22,7 +23,6 @@ export default function ContactUs() {
   const icons = [
     { component: Facebook, href: "" },
     { component: Instagram, href: "https://www.instagram.com/revaa.events/" },
-     { component: Twitter, href: "" },
     
    
   ];
@@ -117,7 +117,7 @@ export default function ContactUs() {
     {
       icon: <Mail className="h-5 w-5 text-pink-600" />,
       title: "Email Us",
-      details: "hello@revaaevent.com",
+      details: "contact@revaaevent.com",
       subdetails: "We typically reply within 12 hours",
     },
     {
@@ -155,7 +155,8 @@ export default function ContactUs() {
   ];
 
   return (
-    <div id="contact" className="bg-gradient-to-br from-pink-50 to-white py-16 overflow-hidden">
+    <div id="contact" className="bg-gradient-to-br from-pink-50 to-white mt-15 py-16 overflow-hidden">
+      <NavbarDemo />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="text-center mb-12"
@@ -167,7 +168,7 @@ export default function ContactUs() {
             REACH OUT TO REVAA-BOT
           </p>
           <h2 className="text-4xl font-extrabold text-gray-900">
-            Let&apos;s Plan Magic Together ✨
+            Let&apos;s Plan Magic Together 
           </h2>
           <p className="mt-4 text-gray-700 max-w-2xl mx-auto">
             Ready to transform your vision into a memorable event? Our team is

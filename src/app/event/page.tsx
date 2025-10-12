@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import ScrollExpandMedia from "@/components/scroll-expansion-hero";
+// import { VideoExpansionTextBlend } from "@/components/Expansion";
 
-const Demo = () => {
+const Night = () => {
   const mediaType = "video";
 
   useEffect(() => {
@@ -13,7 +14,7 @@ const Demo = () => {
   }, [mediaType]);
 
   return (
-    <div className="min-h-screen text-white">
+    <div className="min-h-screen text-white ">
       <ScrollExpandMedia
         mediaType="video"
         mediaSrc="/event/video.mp4"
@@ -22,11 +23,10 @@ const Demo = () => {
         title="REVAA Couture Night"
         date="Coming Soon"
         scrollToExpand=""
-      >
+        />
         {/* <VideoExpansionTextBlend /> */}
-      </ScrollExpandMedia>
     </div>
   );
 };
 
-export default Demo;
+export default Night;

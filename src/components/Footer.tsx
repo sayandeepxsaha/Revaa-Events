@@ -82,7 +82,7 @@ export const Footer = () => {
                   { name: "Collections", href: "/collection" },
                   { name: "About", href: "/about" },
                   { name: "Services", href: "/services" },
-                  { name: "Contact", href: "/#contact" }
+                  { name: "Contact", href: "/contact" }
                 ].map((link) => (
                   <li key={link.name}>
                     <Link 

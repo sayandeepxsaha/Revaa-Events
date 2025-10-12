@@ -35,7 +35,7 @@ function DemoVariant1() {
     <>
       <NavbarDemo />
 
-      <div className="relative bg-white">
+      <div className="relative bg-white mt-15">
         {/* Heading + Text */}
         <ContainerStagger className="relative z-10 -mb-12 place-self-center px-4 md:px-6 pt-12 text-center">
           <ContainerAnimated>

@@ -13,7 +13,8 @@ export const Hero = () => {
   return (
     <div>
       {/* <CarouselComponent /> */}
-      
+      <div className="-mt-20 mb-10">
+
        <AnimatedMarqueeHero
       tagline="Your Vision, Our Mission"
       title={
@@ -26,8 +27,9 @@ export const Hero = () => {
       description="“At Revaa Events, we craft unforgettable experiences - with creativity, precision, and elegance, we transform your vision into timeless celebrations.”"
       ctaText="Collections"
       images={images}
-    />
+      />
 
+      </div>
     </div>
   );
 };

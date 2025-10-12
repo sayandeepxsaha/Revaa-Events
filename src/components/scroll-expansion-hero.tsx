@@ -11,6 +11,7 @@ import {
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
+
 interface ScrollExpandMediaProps {
   mediaType?: 'video' | 'image';
   mediaSrc: string;
@@ -171,9 +172,9 @@ const ScrollExpandMedia = ({
   return (
     <div
       ref={sectionRef}
-      className='transition-colors duration-700 ease-in-out overflow-x-hidden'
+      className='transition-colors duration-700 ease-in-out overflow-x-hidden '
     >
-      <section className='relative flex flex-col items-center justify-start min-h-[100dvh]'>
+      <section className='relative flex flex-col items-center justify-start min-h-[100dvh] w-full overflow-hidden'>
         <div className='relative w-full flex flex-col items-center min-h-[100dvh]'>
           <motion.div
             className='absolute inset-0 z-0 h-full'
@@ -290,7 +291,7 @@ const ScrollExpandMedia = ({
                 <div className='flex flex-col items-center text-center relative z-10 mt-4 transition-none'>
                   {date && (
                     <p
-                      className='text-2xl text-blue-200'
+                      className='text-2xl text-pink-300'
                       style={{ transform: `translateX(-${textTranslateX}vw)` }}
                     >
                       {date}
@@ -298,7 +299,7 @@ const ScrollExpandMedia = ({
                   )}
                   {scrollToExpand && (
                     <p
-                      className='text-blue-200 font-medium text-center'
+                      className='text-purple-700 font-medium text-center'
                       style={{ transform: `translateX(${textTranslateX}vw)` }}
                     >
                       {scrollToExpand}
